@@ -26,7 +26,7 @@ Nx.VERSIONFAV			= .16				-- Favorite data
 
 Nx.Notes = {}
 
-CarboniteNotes = LibStub("AceAddon-3.0"):NewAddon("CarboniteNotes","AceEvent-3.0","AceTimer-3.0","AceComm-3.0")
+CarboniteNotes = LibStub("AceAddon-3.0"):NewAddon("CarboniteNotes", "AceTimer-3.0", "AceEvent-3.0", "AceComm-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("Carbonite.Notes", true)
 
 -- Keybindings
