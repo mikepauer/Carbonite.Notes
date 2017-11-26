@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Bindings>
 	<Binding name="NxTOGGLEFAV" header="CarboniteNotes" category="Carbonite">
 		Nx.NXFavKeyToggleShow();
