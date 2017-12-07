@@ -205,6 +205,8 @@ function Nx.Notes:Init()
 	"Interface\\PVPFrame\\PVP-ArenaPoints-Icon",
 	"Interface\\Icons\\Spell_Arcane_PortalDalaran",
 	}
+	
+	CarboniteNotes:RegisterEvent("LOOT_CLOSED", function() Nx.Notes:Update(); end )
 end
 
 function Nx.Notes:GetIconInline (index)
@@ -309,7 +311,7 @@ function Nx.Notes:Create()
 	self:CreateMenu()
 
 	--
-
+	
 	self:Update()
 
 	self.List:FullUpdate()
@@ -673,7 +675,7 @@ end
 
 function Nx.Notes:OnListEvent (eventName, sel, val2, click)
 
---	Nx.prt ("Guide list event "..eventName)
+	-- Nx.prt ("Notes list event "..eventName)
 
 	local data = self.List:ItemGetData (sel)
 
