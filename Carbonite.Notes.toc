@@ -1,6 +1,6 @@
-## Interface: 70300
-## Title: Carbonite Notes 7.3.0
-## Version: 7.3.0
+## Interface: 80000
+## Title: Carbonite Notes 8.0.0
+## Version: 8.0.0
 ## Author: Rythal
 ## Notes: Released Under GPL
 ## DefaultState: Enabled

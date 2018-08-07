@@ -80,7 +80,7 @@ local function notesConfig()
 						local map = Nx.Map:GetMap (1)						
 						Nx.fdb.profile.Notes.HandyNotes = not Nx.fdb.profile.Notes.HandyNotes
 						if Nx.fdb.profile.Notes.HandyNotes then
-							Nx.Notes:HandyNotes(GetCurrentMapAreaID())
+							Nx.Notes:HandyNotes(Nx.Map:GetCurrentMapAreaID())
 						else
 							map:ClearIconType("!HANDY")
 						end
@@ -107,7 +107,7 @@ local function notesConfig()
 						local map = Nx.Map:GetMap (1)						
 						Nx.fdb.profile.Notes.HandyNotesSize = value
 						map:ClearIconType("!HANDY")
-						Nx.Notes:HandyNotes(GetCurrentMapAreaID())
+						Nx.Notes:HandyNotes(Nx.Map:GetCurrentMapAreaID())
 					end,
 					disabled = function()
 						if HandyNotes then
@@ -216,6 +216,22 @@ end
 
 function Nx.Notes:GetIconFile (index)
 	return self.NoteIcons[index]
+end
+
+-- xpcall safecall implementation
+local xpcall = xpcall
+
+local function errorhandler(err)
+	return geterrorhandler()(err)
+end
+
+local function safecall(func, ...)
+	-- we check to see if the func is passed is actually a function here and don't error when it isn't
+	-- this safecall is used for optional functions like OnEnter OnLeave etc. When they are not
+	-- present execution should continue without hinderance
+	if type(func) == "function" then
+		return xpcall(func, errorhandler, ...)
+	end
 end
 
 local handypin = {}
@@ -1445,7 +1461,7 @@ function Nx.Notes:UpdateIcons()
 	local mapId = map.MapId
 	local draw = map.ScaleDraw > .3 and Nx.fdb.profile.Notes.ShowMap
 
-	if mapId == self.DrawMapId and draw == self.Draw and self.InstLevelSet == GetCurrentMapDungeonLevel() then
+	if mapId == self.DrawMapId and draw == self.Draw and self.InstLevelSet == Nx.Map:GetCurrentMapDungeonLevel() then
 		return
 	end
 
@@ -1455,11 +1471,11 @@ function Nx.Notes:UpdateIcons()
 	map:InitIconType ("!Fav", "WP", "", 17, 17)
 --	map:SetIconTypeAlpha ("!Fav", map.GOpts["MapIconFavAlpha"])
 
-	if not draw and self.InstLevelSet == GetCurrentMapDungeonLevel() then
+	if not draw and self.InstLevelSet == Nx.Map:GetCurrentMapDungeonLevel() then
 		return
 	end
 	
-	self.InstLevelSet = GetCurrentMapDungeonLevel()
+	self.InstLevelSet = Nx.Map:GetCurrentMapDungeonLevel()
 	
 	local cont = map:IdToContZone (mapId)
 	cont = tonumber(cont)
@@ -1503,7 +1519,7 @@ function Nx.Notes:UpdateIcons()
 			end
 		end
 		Nx.Notes:HandyNotes(mapId)
-		WorldMap_HijackTooltip(map.Frm)
+		--WorldMap_HijackTooltip(map.Frm)
 		WorldMapTooltip:Hide()		
 	end
 end
@@ -1514,12 +1530,12 @@ function Nx.Notes:HandyNotes(mapId)
 		map:InitIconType ("!HANDY", "WP", "", Nx.fdb.profile.Notes.HandyNotesSize or 15, Nx.fdb.profile.Notes.HandyNotesSize or 15)
 		map:SetIconTypeChop ("!HANDY", true)
 		map:SetIconTypeLevel ("!HANDY", 20)
-		local mapFile, textureHeight, textureWidth, isMicroDungeon, microDungeonMapName = GetMapInfo()
-		local lvl = GetCurrentMapDungeonLevel()
-		if isMicroDungeon then mapFile = microDungeonMapName end
+		--local mapFile, textureHeight, textureWidth, isMicroDungeon, microDungeonMapName = GetMapInfo()
+		local lvl = Nx.Map:GetCurrentMapDungeonLevel()
+		--if isMicroDungeon then mapFile = microDungeonMapName end
 		for pluginName, pluginHandler in pairs(HandyNotes.plugins) do
 			HandyNotes:UpdateWorldMapPlugin(pluginName)
-			for coord, mapFile2, iconpath, scale, alpha, level2 in pluginHandler:GetNodes(mapFile, false, lvl) do				
+			for coord, mapFile2, iconpath, scale, alpha, level2 in pluginHandler:GetNodes2(mapId, false) do				
 				local x, y = floor(coord / 10000) / 100, (coord % 10000) / 100
 				local texture
 				local wx, wy = Nx.Map:GetWorldPos(mapId,x,y)
@@ -1536,14 +1552,13 @@ function Nx.Notes:HandyNotes(mapId)
 					texture = iconpath
 				end					
 				local icon = CreateFrame("Frame", "HandyCarb", UIParent)
-				icon:SetParent(WorldMapButton)
+				local tmpFrame = WorldMapFrame:GetCanvas()
+				icon:SetParent(tmpFrame)
 				icon:ClearAllPoints()
 				icon:SetHeight(scale)
 				icon:SetWidth(scale)
-				icon:SetPoint("CENTER", WorldMapButton, "TOPLEFT", x*WorldMapButton:GetWidth(), -y*WorldMapButton:GetHeight())					
-				icon:SetScript("OnEnter", handypin.OnEnter)
-				icon:SetScript("OnLeave", handypin.OnLeave)										
-				HandyNotes.plugins[pluginName].OnEnter(icon, mapFile, coord)
+				icon:SetPoint("CENTER", tmpFrame, "TOPLEFT", x*tmpFrame:GetWidth(), -y*tmpFrame:GetHeight())
+				safecall(HandyNotes.plugins[pluginName].OnEnter, icon, mapId, coord)
 				local tooltip = ""
 				local tooltipName	
 				tooltipName = "WorldMapTooltip"
