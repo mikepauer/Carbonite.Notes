@@ -1535,7 +1535,15 @@ function Nx.Notes:HandyNotes(mapId)
 		--if isMicroDungeon then mapFile = microDungeonMapName end
 		for pluginName, pluginHandler in pairs(HandyNotes.plugins) do
 			HandyNotes:UpdateWorldMapPlugin(pluginName)
-			for coord, mapFile2, iconpath, scale, alpha, level2 in pluginHandler:GetNodes2(mapId, false) do				
+			local pluginNodes, mapFile
+			if type(pluginHandler.GetNodes) == "function" then
+				mapFile = select(3, Nx.Map:GetLegacyMapInfo(mapId))
+				pluginNodes = {pluginHandler:GetNodes(mapFile, false, lvl)}
+			else
+				pluginNodes = {pluginHandler:GetNodes2(mapId, false)}
+			end
+			Nx.pluginNodes = pluginNodes
+			for coord, mapFile2, iconpath, scale, alpha, level2 in unpack(pluginNodes) do				
 				local x, y = floor(coord / 10000) / 100, (coord % 10000) / 100
 				local texture
 				local wx, wy = Nx.Map:GetWorldPos(mapId,x,y)
@@ -1550,7 +1558,7 @@ function Nx.Notes:HandyNotes(mapId)
 					end
 				else
 					texture = iconpath
-				end					
+				end						
 				local icon = CreateFrame("Frame", "HandyCarb", UIParent)
 				local tmpFrame = WorldMapFrame:GetCanvas()
 				icon:SetParent(tmpFrame)
@@ -1558,10 +1566,10 @@ function Nx.Notes:HandyNotes(mapId)
 				icon:SetHeight(scale)
 				icon:SetWidth(scale)
 				icon:SetPoint("CENTER", tmpFrame, "TOPLEFT", x*tmpFrame:GetWidth(), -y*tmpFrame:GetHeight())
-				safecall(HandyNotes.plugins[pluginName].OnEnter, icon, mapId, coord)
+				safecall(HandyNotes.plugins[pluginName].OnEnter, icon, mapFile and mapFile or mapId, coord)
 				local tooltip = ""
 				local tooltipName	
-				tooltipName = "WorldMapTooltip"
+				tooltipName = mapFile and "GameTooltip" or "WorldMapTooltip"
 				local handynote
 				if x1 then
 					handynote = map:AddIconPt("!HANDY", wx, wy, level2, "FFFFFF", texture, x1, x2, y1, y2)
