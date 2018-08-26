@@ -1591,6 +1591,7 @@ function Nx.Notes:HandyNotes(mapId)
 					end
 				end
 				map:SetIconTip(handynote,tooltip)
+				safecall(HandyNotes.plugins[pluginName].OnLeave, icon, mapFile and mapFile or mapId, coord)
 			end
 		end
 	end
