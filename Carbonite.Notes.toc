@@ -1,12 +1,14 @@
 ## Interface: 80000
-## Title: Carbonite Notes 8.0.0
-## Version: 8.0.0
+## Title: Carbonite Notes @project-version@
+## Version: @project-version@
 ## Author: Rythal
 ## Notes: Released Under GPL
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: NXNotes
 ## RequiredDeps: Carbonite
+
+## X-WoWI-ID: 23406
 
 Locales\locales.xml
 NxFav.lua
