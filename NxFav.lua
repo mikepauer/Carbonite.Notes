@@ -1520,7 +1520,7 @@ function Nx.Notes:UpdateIcons()
 		end
 		Nx.Notes:HandyNotes(mapId)
 		--WorldMap_HijackTooltip(map.Frm)
-		WorldMapTooltip:Hide()		
+		GameTooltip:Hide()		
 	end
 end
 
@@ -1568,8 +1568,7 @@ function Nx.Notes:HandyNotes(mapId)
 				icon:SetPoint("CENTER", tmpFrame, "TOPLEFT", x*tmpFrame:GetWidth(), -y*tmpFrame:GetHeight())
 				safecall(HandyNotes.plugins[pluginName].OnEnter, icon, mapFile and mapFile or mapId, coord)
 				local tooltip = ""
-				local tooltipName	
-				tooltipName = mapFile and "GameTooltip" or "WorldMapTooltip"
+				local tooltipName = "GameTooltip"
 				local handynote
 				if x1 then
 					handynote = map:AddIconPt("!HANDY", wx, wy, level2, "FFFFFF", texture, x1, x2, y1, y2)
