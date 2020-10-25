@@ -892,7 +892,7 @@ function Nx.Notes:UpdateItems (selectI)
 							list:ItemAdd(item)
 							local icon, id, x, y, level = self:ParseItemNote (data)
 							icon = self:GetIconInline (icon)
-							id = GetMapNameByID(id) or "?"
+							id = Nx.Map:GetMapNameByID(id) or "?"
 							list:ItemSet (2, "Note:")
 							list:ItemSet (3, format ("%s %s", icon, name))
 							list:ItemSet (4, format ("|cff80ef80(%s %.1f %.1f)", id, x, y))
@@ -915,7 +915,7 @@ function Nx.Notes:UpdateItems (selectI)
 
 					local icon, id, x, y, level = self:ParseItemNote (data)
 					icon = self:GetIconInline (icon)
-					local newid = GetMapNameByID(id) or "?"
+					local newid = Nx.Map:GetMapNameByID(id) or "?"
 					list:ItemSet (2, L["Note"] .. ":")
 					list:ItemSet (3, format ("%s %s", icon, name))
 					list:ItemSet (4, format ("|cff80ef80(%s %.1f %.1f)", newid, x, y))
@@ -924,7 +924,7 @@ function Nx.Notes:UpdateItems (selectI)
 
 					local typName = typ == "T" and "Target 1st" or "Target"
 					local mapId, x, y = self:ParseItemTarget (data)
-					local mapName = GetMapNameByID(mapId) or "?"
+					local mapName = Nx.Map:GetMapNameByID(mapId) or "?"
 					list:ItemSet (2, format ("%s:", typName))
 					list:ItemSet (3, format ("%s", name))
 					list:ItemSet (4, format ("|cff80ef80(%s %.1f %.1f)", mapName, x, y))
