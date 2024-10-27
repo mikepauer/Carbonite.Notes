@@ -252,6 +252,22 @@ function Nx.Notes:Init()
 	"Interface\\TargetingFrame\\UI-PVP-FFA",
 	"Interface\\PVPFrame\\PVP-ArenaPoints-Icon",
 	"Interface\\Icons\\Spell_Arcane_PortalDalaran",
+	"Interface\\Icons\\inv_spell_arcane_portaldornogal",
+  	"Interface\\Icons\\ui_profession_alchemy",
+  	"Interface\\Icons\\ui_profession_blacksmithing",
+  	"Interface\\Icons\\ui_profession_cooking",
+  	"Interface\\Icons\\ui_profession_enchanting",
+  	"Interface\\Icons\\ui_profession_engineering",
+  	"Interface\\Icons\\ui_profession_fishing",
+  	"Interface\\Icons\\ui_profession_herbalism",
+  	"Interface\\Icons\\ui_profession_inscription",
+  	"Interface\\Icons\\ui_profession_jewelcrafting",
+  	"Interface\\Icons\\ui_profession_leatherworking",
+  	"Interface\\Icons\\ui_profession_mining",
+  	"Interface\\Icons\\ui_profession_skinning",
+  	"Interface\\Icons\\ui_profession_tailoring",
+  	"Interface\\Icons\\garrison_armorupgrade",
+  	"Interface\\Icons\\ui_delves",
 	}
 	
 	CarboniteNotes:RegisterEvent("LOOT_CLOSED", function() Nx.Notes:Update(); end )
